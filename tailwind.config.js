@@ -12,6 +12,9 @@ export default {
       gridTemplateColumns: {
         'auto-fill': 'repeat(auto-fill, minmax(240px, 1fr))',
       },
+      gridTemplateRows: {
+        'auto-fill': 'repeat(auto-fill, 90px)',
+      },
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
