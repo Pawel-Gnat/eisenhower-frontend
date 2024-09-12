@@ -8,7 +8,7 @@ function App() {
       <header className="text-right">
         <Button>Login</Button>
       </header>
-      <main className="mt-4 flex flex-1 flex-col gap-4 sm:mt-8 sm:gap-8">
+      <main className="mt-4 flex flex-1 flex-col gap-4 sm:mt-8 sm:gap-8 overflow-hidden">
         <h1 className="text-center text-3xl font-bold">Eisenhower Matrix</h1>
         <TaskForm />
         <TasksGrid />

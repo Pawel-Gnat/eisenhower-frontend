@@ -2,7 +2,7 @@ import { TaskCard } from './task-card';
 
 export const TasksGrid = () => {
   return (
-    <div className="grid-cols-auto-fill relative mx-auto grid w-full max-w-screen-2xl flex-1 gap-4 rounded-xl border-2 border-dashed p-4">
+    <div className="relative mx-auto grid w-full max-w-screen-2xl flex-1 grid-cols-auto-fill gap-4 overflow-y-auto rounded-xl border-2 border-dashed p-4">
       <TaskCard title="6TUBCoGrRScyEUxMrqR0" />
       <TaskCard title="crzUVVRNVwl3" />
       <TaskCard title="IVWuexxc5D5HnzjS9lr" />
