@@ -13,7 +13,7 @@ export default {
         'auto-fill': 'repeat(auto-fill, minmax(240px, 1fr))',
       },
       gridTemplateRows: {
-        'auto-fill': 'repeat(auto-fill, 90px)',
+        'auto-fill': 'repeat(auto-fill, 150px)',
       },
       colors: {
         background: 'hsl(var(--background))',

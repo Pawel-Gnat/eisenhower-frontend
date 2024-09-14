@@ -4,11 +4,16 @@ import { Button } from './components/ui/button';
 import { TaskContextProvider } from './context/task-context';
 import { Header } from './components/header';
 
+enum STEPS {
+  CREATE = 0,
+  RENDER = 1,
+}
+
 function App() {
   return (
     <TaskContextProvider>
       <Header />
-      <main className="mt-4 flex flex-1 flex-col gap-4 overflow-hidden sm:mt-8 sm:gap-8">
+      <main className="flex flex-1 flex-col gap-4 overflow-hidden pt-4 sm:gap-8 sm:pt-8">
         <TaskForm />
         <TasksGrid />
         <div className="text-right">

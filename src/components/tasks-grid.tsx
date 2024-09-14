@@ -10,13 +10,15 @@ export const TasksGrid = () => {
   };
 
   return (
-    <div className="grid-rows-auto-fill relative mx-auto grid w-full max-w-screen-2xl flex-1 grid-cols-auto-fill gap-4 overflow-y-auto rounded-xl border-2 border-dashed p-4">
+    <div className="relative mx-auto grid w-full max-w-screen-2xl flex-1 grid-cols-auto-fill grid-rows-auto-fill gap-4 overflow-y-auto rounded-xl border-2 border-dashed p-4">
       {tasks.length > 0 ? (
         tasks.map((task) => (
           <TaskCard
             key={task.id}
             title={task.title}
             id={task.id}
+            urgency={task.urgency}
+            importance={task.importance}
             onDelete={handleTaskDelete}
           />
         ))
