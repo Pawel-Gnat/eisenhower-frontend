@@ -27,7 +27,15 @@ export const TaskForm = () => {
   });
 
   function onSubmit(values: z.infer<typeof TaskFormSchema>) {
-    setTasks((prev) => [...prev, { id: self.crypto.randomUUID(), title: values.title }]);
+    setTasks((prev) => [
+      ...prev,
+      {
+        id: self.crypto.randomUUID(),
+        title: values.title,
+        urgency: '',
+        importance: '',
+      },
+    ]);
     form.reset();
   }
 
@@ -35,7 +43,7 @@ export const TaskForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-row justify-center gap-4"
+        className="flex min-h-16 flex-row justify-center gap-4"
       >
         <FormField
           control={form.control}

@@ -4,17 +4,16 @@ import { Edit2, Trash2 } from 'lucide-react';
 import { Task } from '@/types';
 import { RadioGroup } from './radio-group';
 
-interface TaskCardProps {
-  id: string;
-  title: string;
-  urgency: Task['urgency'];
-  importance: Task['importance'];
+interface TaskCardProps extends Task {
   onDelete: (id: string) => void;
 }
 
+const urgencyOptions: Task['urgency'][] = ['urgent', 'not urgent'];
+const importanceOptions: Task['importance'][] = ['important', 'not important'];
+
 export const TaskCard = ({ id, title, urgency, importance, onDelete }: TaskCardProps) => {
   return (
-    <Card className="mx-auto flex w-full max-w-md flex-col justify-between p-4 transition-shadow hover:shadow-md">
+    <Card className="mx-auto flex w-full flex-col justify-between p-4 transition-shadow hover:shadow-md">
       <div className="flex items-center justify-between gap-2">
         <CardTitle className="truncate text-sm font-medium">{title}</CardTitle>
         <div className="flex-shrink-0">
@@ -32,9 +31,10 @@ export const TaskCard = ({ id, title, urgency, importance, onDelete }: TaskCardP
         </div>
       </div>
 
-      {urgency.map((item) => (
-        <RadioGroup key={item} defaultValue={item} values={item} />
-      ))}
+      <div className="flex flex-wrap justify-between gap-4">
+        <RadioGroup defaultValue={urgency} values={urgencyOptions} />
+        <RadioGroup defaultValue={importance} values={importanceOptions} />
+      </div>
     </Card>
   );
 };

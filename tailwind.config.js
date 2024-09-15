@@ -10,10 +10,10 @@ export default {
         sm: 'calc(var(--radius) - 4px)',
       },
       gridTemplateColumns: {
-        'auto-fill': 'repeat(auto-fill, minmax(240px, 1fr))',
+        'auto-fill': 'repeat(auto-fill, minmax(15rem, 1fr))',
       },
       gridTemplateRows: {
-        'auto-fill': 'repeat(auto-fill, 150px)',
+        'auto-fill': 'repeat(auto-fill, minmax(10rem, 1fr))',
       },
       colors: {
         background: 'hsl(var(--background))',
