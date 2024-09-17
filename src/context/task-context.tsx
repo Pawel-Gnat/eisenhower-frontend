@@ -1,3 +1,4 @@
+import { saveToLocalStorage } from '@/helpers/local-storage';
 import { Task } from '@/types';
 import {
   createContext,
@@ -23,10 +24,12 @@ export const TaskContext = createContext<TaskContextProps>({
 });
 
 export const TaskContextProvider = ({ children }: TaskContextProviderProps) => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>(() =>
+    JSON.parse(localStorage.getItem('isenhower') || '[]'),
+  );
 
   useEffect(() => {
-    console.log(tasks);
+    saveToLocalStorage(tasks);
   }, [tasks]);
 
   return (

@@ -6,12 +6,20 @@ import { RadioGroup } from './radio-group';
 
 interface TaskCardProps extends Task {
   onDelete: (id: string) => void;
+  onSelectOption: <K extends keyof Task>(id: string, field: K, value: Task[K]) => void;
 }
 
 const urgencyOptions: Task['urgency'][] = ['urgent', 'not urgent'];
 const importanceOptions: Task['importance'][] = ['important', 'not important'];
 
-export const TaskCard = ({ id, title, urgency, importance, onDelete }: TaskCardProps) => {
+export const TaskCard = ({
+  id,
+  title,
+  urgency,
+  importance,
+  onDelete,
+  onSelectOption,
+}: TaskCardProps) => {
   return (
     <Card className="mx-auto flex w-full flex-col justify-between p-4 transition-shadow hover:shadow-md">
       <div className="flex items-center justify-between gap-2">
@@ -32,8 +40,16 @@ export const TaskCard = ({ id, title, urgency, importance, onDelete }: TaskCardP
       </div>
 
       <div className="flex flex-wrap justify-between gap-4">
-        <RadioGroup defaultValue={urgency} values={urgencyOptions} />
-        <RadioGroup defaultValue={importance} values={importanceOptions} />
+        <RadioGroup<Task['urgency']>
+          defaultValue={urgency}
+          values={urgencyOptions}
+          onChange={(value) => onSelectOption(id, 'urgency', value)}
+        />
+        <RadioGroup<Task['importance']>
+          defaultValue={importance}
+          values={importanceOptions}
+          onChange={(value) => onSelectOption(id, 'importance', value)}
+        />
       </div>
     </Card>
   );
