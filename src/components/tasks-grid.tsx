@@ -1,10 +1,10 @@
-import { TaskContext } from '@/context/task-context';
+import { AppContext } from '@/context/app-context';
 import { TaskCard } from './task-card';
 import { useContext } from 'react';
 import { Task } from '@/types';
 
 export const TasksGrid = () => {
-  const { tasks, setTasks } = useContext(TaskContext);
+  const { tasks, setTasks } = useContext(AppContext);
 
   const handleTaskDelete = (id: string) => {
     setTasks((prev) => prev.filter((task) => task.id !== id));

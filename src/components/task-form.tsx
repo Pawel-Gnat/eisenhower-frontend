@@ -14,10 +14,10 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useContext } from 'react';
-import { TaskContext } from '@/context/task-context';
+import { AppContext } from '@/context/app-context';
 
 export const TaskForm = () => {
-  const { setTasks } = useContext(TaskContext);
+  const { setTasks } = useContext(AppContext);
 
   const form = useForm<z.infer<typeof TaskFormSchema>>({
     resolver: zodResolver(TaskFormSchema),
