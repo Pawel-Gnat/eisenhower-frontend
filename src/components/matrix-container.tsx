@@ -19,7 +19,7 @@ export const MatrixContainer = () => {
   );
 
   return (
-    <div className="relative mx-auto my-4 grid w-full max-w-screen-2xl flex-1 grid-cols-2 grid-rows-2 gap-4 overflow-y-auto">
+    <div className="scrollbar-custom mx-auto my-4 grid w-full max-w-screen-2xl flex-1 grid-cols-1 gap-4 overflow-y-auto rounded-xl border-2 border-dashed p-4 md:grid-cols-2">
       <MatrixColumn
         title="Do"
         description="(Urgent & Important)"

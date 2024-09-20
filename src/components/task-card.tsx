@@ -21,9 +21,9 @@ export const TaskCard = ({
   onSelectOption,
 }: TaskCardProps) => {
   return (
-    <Card className="mx-auto flex w-full flex-col justify-between p-4 transition-shadow hover:shadow-md">
+    <Card className="mx-auto flex min-h-32 w-full flex-col justify-between gap-2 p-4 transition-shadow hover:shadow-md">
       <div className="flex items-center justify-between gap-2">
-        <CardTitle className="truncate text-lg font-medium">{title}</CardTitle>
+        <CardTitle className="cursor-default truncate font-bold">{title}</CardTitle>
         <div className="flex-shrink-0">
           <Button variant="ghost" size="icon" onClick={() => {}} aria-label="Edit task">
             <Edit2 className="h-4 w-4" />

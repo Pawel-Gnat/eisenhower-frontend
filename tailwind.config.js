@@ -10,10 +10,10 @@ export default {
         sm: 'calc(var(--radius) - 4px)',
       },
       gridTemplateColumns: {
-        'auto-fill': 'repeat(auto-fill, minmax(15rem, 1fr))',
+        'auto-fill': 'repeat(auto-fill, minmax(17rem, 1fr))',
       },
       gridTemplateRows: {
-        'auto-fill': 'repeat(auto-fill, minmax(10rem, 1fr))',
+        'auto-fill': 'repeat(auto-fill, minmax(8rem, 1fr))',
       },
       colors: {
         background: 'hsl(var(--background))',
@@ -59,5 +59,11 @@ export default {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [
+    require('tailwindcss-animate'),
+    require('tailwind-scrollbar')({
+      preferredStrategy: 'pseudoelements',
+      nocompatible: true,
+    }),
+  ],
 };
