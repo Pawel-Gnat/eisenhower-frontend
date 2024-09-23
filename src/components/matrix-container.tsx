@@ -1,5 +1,7 @@
-import { AppContext } from '@/context/app-context';
 import { useContext } from 'react';
+
+import { AppContext } from '@/context/app-context';
+
 import { MatrixColumn } from './matrix-column';
 
 export const MatrixContainer = () => {
