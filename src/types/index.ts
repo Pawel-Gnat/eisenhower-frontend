@@ -3,4 +3,5 @@ export type Task = {
   title: string;
   urgency: 'urgent' | 'not urgent' | '';
   importance: 'important' | 'not important' | '';
+  order: number;
 };

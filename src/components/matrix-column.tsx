@@ -1,3 +1,14 @@
+import {
+  closestCenter,
+  DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+
 import { MatrixCard } from './matrix-card';
 
 import { Task } from '@/types';
