@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
   closestCenter,
   DragEndEvent,
@@ -15,6 +15,8 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
+
+import { AppContext } from '@/context/app-context';
 
 import { MatrixCard } from './matrix-card';
 
@@ -34,7 +36,17 @@ export const MatrixColumn = ({ title, description, tasks }: MatrixColumnProps) =
     })),
   );
   const [activeItem, setActiveItem] = useState<SortedTask | undefined>(undefined);
+  const { setPdfData } = useContext(AppContext);
   const sensors = useSensors(useSensor(TouchSensor), useSensor(PointerSensor));
+
+  useEffect(() => {
+    setPdfData((prev) => ({
+      ...prev,
+      [title.toLowerCase()]: sortedTasks.map((task) => ({
+        ...task,
+      })),
+    }));
+  }, [sortedTasks]);
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;

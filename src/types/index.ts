@@ -8,3 +8,10 @@ export type Task = {
 export type SortedTask = Task & {
   order: number;
 };
+
+export type PdfData = {
+  do: SortedTask[];
+  schedule: SortedTask[];
+  delegate: SortedTask[];
+  delete: SortedTask[];
+};
