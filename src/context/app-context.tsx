@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 
-import { saveToLocalStorage } from '@/helpers/local-storage';
+import { saveToLocalStorage } from '@/helpers/helpers';
 
 import { PdfData, Task } from '@/types';
 

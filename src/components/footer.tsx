@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { usePDF } from '@react-pdf/renderer';
 
 import { AppContext } from '@/context/app-context';
@@ -7,8 +7,12 @@ import { Pdf } from './pdf';
 import { Button } from './ui/button';
 
 export const Footer = () => {
-  const { view, setView, setTasks } = useContext(AppContext);
-  const [instance] = usePDF({ document: Pdf() });
+  const { view, setView, setTasks, pdfData } = useContext(AppContext);
+  const [instance, updateInstance] = usePDF({ document: <Pdf pdfData={pdfData} /> });
+
+  useEffect(() => {
+    updateInstance(<Pdf pdfData={pdfData} />);
+  }, [pdfData]);
 
   const toggleView = () => {
     setView((prev) => (prev === 1 ? 0 : 1));
