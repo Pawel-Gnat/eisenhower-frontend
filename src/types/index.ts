@@ -15,3 +15,10 @@ export type PdfData = {
   delegate: SortedTask[];
   delete: SortedTask[];
 };
+
+export type ModalState = {
+  isModalOpen: boolean;
+  title: string;
+  description: string;
+  action: () => void;
+};

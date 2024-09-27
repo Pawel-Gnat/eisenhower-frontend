@@ -2,12 +2,14 @@ import { useContext, useEffect } from 'react';
 import { usePDF } from '@react-pdf/renderer';
 
 import { AppContext } from '@/context/app-context';
+import { ModalContext } from '@/context/modal-context';
 
 import { Pdf } from './pdf';
 import { Button } from './ui/button';
 
 export const Footer = () => {
   const { view, setView, setTasks, pdfData } = useContext(AppContext);
+  const { dispatch } = useContext(ModalContext);
   const [instance, updateInstance] = usePDF({ document: <Pdf pdfData={pdfData} /> });
 
   useEffect(() => {
@@ -19,8 +21,15 @@ export const Footer = () => {
   };
 
   const resetAppState = () => {
-    setView(0);
-    setTasks([]);
+    // setView(0);
+    // setTasks([]);
+
+    dispatch({
+      type: 'RESET_TASKS',
+      payload: {
+        action: () => console.log('reset'),
+      },
+    });
   };
 
   return (

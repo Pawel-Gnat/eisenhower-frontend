@@ -1,13 +1,31 @@
-import { AppContext } from '@/context/app-context';
-import { TaskCard } from './task-card';
 import { useContext } from 'react';
+
+import { AppContext } from '@/context/app-context';
+import { ModalContext } from '@/context/modal-context';
+
+import { TaskCard } from './task-card';
+
 import { Task } from '@/types';
 
 export const TasksGrid = () => {
   const { tasks, setTasks } = useContext(AppContext);
+  const { dispatch } = useContext(ModalContext);
 
-  const handleTaskDelete = (id: string) => {
-    setTasks((prev) => prev.filter((task) => task.id !== id));
+  const handleDeleteTask = (id: string, title: string) => {
+    dispatch({
+      type: 'DELETE_TASK',
+      payload: {
+        taskName: title,
+        action: () => setTasks((prev) => prev.filter((task) => task.id !== id)),
+      },
+    });
+  };
+
+  const handleEditTask = (id: string, title: string) => {
+    dispatch({
+      type: 'EDIT_TASK',
+      payload: { taskName: title, action: () => console.log(id) },
+    });
   };
 
   const handleTaskSelectOption = <K extends keyof Task>(
@@ -26,7 +44,8 @@ export const TasksGrid = () => {
         tasks.map((task) => (
           <TaskCard
             key={task.id}
-            onDelete={handleTaskDelete}
+            onDelete={handleDeleteTask}
+            onEdit={handleEditTask}
             onSelectOption={handleTaskSelectOption}
             {...task}
           />

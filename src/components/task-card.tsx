@@ -1,11 +1,14 @@
-import { Card, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Edit2, Trash2 } from 'lucide-react';
-import { Task } from '@/types';
+import { Card, CardTitle } from './ui/card';
+import { Button } from './ui/button';
 import { RadioGroup } from './radio-group';
 
+import { Task } from '@/types';
+
+import { Edit2, Trash2 } from 'lucide-react';
+
 interface TaskCardProps extends Task {
-  onDelete: (id: string) => void;
+  onDelete: (id: string, title: string) => void;
+  onEdit: (id: string, title: string) => void;
   onSelectOption: <K extends keyof Task>(id: string, field: K, value: Task[K]) => void;
 }
 
@@ -18,6 +21,7 @@ export const TaskCard = ({
   urgency,
   importance,
   onDelete,
+  onEdit,
   onSelectOption,
 }: TaskCardProps) => {
   return (
@@ -25,13 +29,18 @@ export const TaskCard = ({
       <div className="flex items-center justify-between gap-2">
         <CardTitle className="cursor-default truncate font-bold">{title}</CardTitle>
         <div className="flex-shrink-0">
-          <Button variant="ghost" size="icon" onClick={() => {}} aria-label="Edit task">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => onEdit(id, title)}
+            aria-label="Edit task"
+          >
             <Edit2 className="h-4 w-4" />
           </Button>
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => onDelete(id)}
+            onClick={() => onDelete(id, title)}
             aria-label="Delete task"
           >
             <Trash2 className="h-4 w-4" />
