@@ -1,7 +1,9 @@
-import { TaskFormSchema } from '@/schemas';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useContext } from 'react';
 import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+import { AppContext } from '@/context/app-context';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -13,8 +15,8 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useContext } from 'react';
-import { AppContext } from '@/context/app-context';
+
+import { TaskFormSchema } from '@/schemas';
 
 export const TaskForm = () => {
   const { setTasks } = useContext(AppContext);

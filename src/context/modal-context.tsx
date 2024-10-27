@@ -1,6 +1,6 @@
 import { createContext, Dispatch, ReactNode, useReducer } from 'react';
 
-import { Action, modalReducer } from '@/reducers/modal-redurec';
+import { Action, modalReducer } from '@/reducers/modal-reducer';
 
 import { ModalState } from '@/types';
 
@@ -13,9 +13,10 @@ interface ModalContextProps extends ModalState {
 }
 
 const initialState: ModalState = {
-  isModalOpen: false,
+  modalState: '',
   title: '',
   description: '',
+  taskId: undefined,
   action: () => {},
 };
 

@@ -5,7 +5,7 @@ export type Action =
       type: 'EDIT_TASK';
       payload: {
         taskName: string;
-        action: () => void;
+        taskId: string;
       };
     }
   | {
@@ -30,15 +30,15 @@ export const modalReducer = (state: ModalState, action: Action): ModalState => {
     case 'EDIT_TASK':
       return {
         ...state,
-        isModalOpen: true,
+        modalState: 'edit',
         title: 'Edit task',
         description: `You are editing the task "${action.payload.taskName}"`,
-        action: action.payload.action,
+        taskId: action.payload.taskId,
       };
     case 'DELETE_TASK':
       return {
         ...state,
-        isModalOpen: true,
+        modalState: 'delete',
         title: 'Delete task',
         description: `Are you sure you want to delete the task "${action.payload.taskName}" ?`,
         action: action.payload.action,
@@ -46,7 +46,7 @@ export const modalReducer = (state: ModalState, action: Action): ModalState => {
     case 'RESET_TASKS':
       return {
         ...state,
-        isModalOpen: true,
+        modalState: 'reset',
         title: 'Reset tasks',
         description: 'Are you sure you want to reset all tasks?',
         action: action.payload.action,
@@ -54,9 +54,10 @@ export const modalReducer = (state: ModalState, action: Action): ModalState => {
     case 'CLOSE_MODAL':
       return {
         ...state,
-        isModalOpen: false,
+        modalState: '',
         title: '',
         description: '',
+        taskId: undefined,
       };
     default:
       throw new Error('Unhandled action type in DialogReducer');

@@ -24,7 +24,7 @@ export const TasksGrid = () => {
   const handleEditTask = (id: string, title: string) => {
     dispatch({
       type: 'EDIT_TASK',
-      payload: { taskName: title, action: () => console.log(id) },
+      payload: { taskName: title, taskId: id },
     });
   };
 
