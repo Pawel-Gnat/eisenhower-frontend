@@ -17,7 +17,7 @@ export type PdfData = {
 };
 
 export type ModalState = {
-  modalState: 'edit' | 'delete' | 'reset' | '';
+  modalState: 'edit' | 'delete' | 'reset' | 'login' | 'register' | '';
   taskId?: string;
   title: string;
   description: string;

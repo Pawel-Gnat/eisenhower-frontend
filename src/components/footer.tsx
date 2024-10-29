@@ -34,12 +34,12 @@ export const Footer = () => {
 
   return (
     <div className="flex justify-between gap-2">
-      <Button onClick={() => resetAppState()} variant="destructive">
+      <Button onClick={resetAppState} variant="destructive">
         Reset
       </Button>
 
       <div className="space-x-2">
-        <Button onClick={() => toggleView()}>{!view ? 'Next' : 'Back'}</Button>
+        <Button onClick={toggleView}>{!view ? 'Next' : 'Back'}</Button>
         {view && instance.url ? (
           <Button asChild disabled={!!(instance.loading || instance.error)}>
             <a href={instance.url} download="eisenhower.pdf">

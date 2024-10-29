@@ -22,6 +22,12 @@ export type Action =
       };
     }
   | {
+      type: 'LOGIN';
+    }
+  | {
+      type: 'REGISTER';
+    }
+  | {
       type: 'CLOSE_MODAL';
     };
 
@@ -50,6 +56,20 @@ export const modalReducer = (state: ModalState, action: Action): ModalState => {
         title: 'Reset tasks',
         description: 'Are you sure you want to reset all tasks?',
         action: action.payload.action,
+      };
+    case 'LOGIN':
+      return {
+        ...state,
+        modalState: 'login',
+        title: 'Login',
+        description: 'Please provide your email and password to login',
+      };
+    case 'REGISTER':
+      return {
+        ...state,
+        modalState: 'register',
+        title: 'Register',
+        description: 'Please provide your email and password to create an account',
       };
     case 'CLOSE_MODAL':
       return {

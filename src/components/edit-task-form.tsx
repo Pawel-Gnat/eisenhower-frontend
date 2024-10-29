@@ -58,7 +58,7 @@ export const EditTaskForm = forwardRef<EditTaskFormRef, EditTaskFormProps>(
             name="title"
             render={({ field }) => (
               <FormItem className="flex flex-col gap-2 space-y-0">
-                <FormLabel className="sr-only">Task name</FormLabel>
+                <FormLabel>Task name</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
