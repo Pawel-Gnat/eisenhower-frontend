@@ -5,6 +5,7 @@ import { Header } from './components/header';
 import { Main } from './components/main';
 import { Footer } from './components/footer';
 import { Modal } from './components/modal';
+import { Toaster } from './components/ui/sonner';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Main />
         <Footer />
         <Modal />
+        <Toaster position="bottom-center" />
       </ModalContextProvider>
     </AppContextProvider>
   );

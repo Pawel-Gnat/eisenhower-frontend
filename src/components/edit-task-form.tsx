@@ -2,6 +2,7 @@ import { forwardRef, useContext, useImperativeHandle } from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'sonner';
 
 import { AppContext } from '@/context/app-context';
 
@@ -44,6 +45,7 @@ export const EditTaskForm = forwardRef<EditTaskFormRef, EditTaskFormProps>(
         ),
       );
       form.reset();
+      toast('Task has been edited');
     }
 
     useImperativeHandle(ref, () => ({

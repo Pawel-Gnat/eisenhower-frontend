@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { toast } from 'sonner';
 
 import { AppContext } from '@/context/app-context';
 import { ModalContext } from '@/context/modal-context';
@@ -16,7 +17,10 @@ export const TasksGrid = () => {
       type: 'DELETE_TASK',
       payload: {
         taskName: title,
-        action: () => setTasks((prev) => prev.filter((task) => task.id !== id)),
+        action: () => {
+          setTasks((prev) => prev.filter((task) => task.id !== id));
+          toast('Task has been deleted');
+        },
       },
     });
   };
