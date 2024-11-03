@@ -1,8 +1,11 @@
+export type UrgencyType = 'urgent' | 'not urgent';
+export type ImportanceType = 'important' | 'not important';
+
 export type Task = {
   id: string;
   title: string;
-  urgency: 'urgent' | 'not urgent' | '';
-  importance: 'important' | 'not important' | '';
+  urgency: UrgencyType | undefined;
+  importance: ImportanceType | undefined;
 };
 
 export type SortedTask = Task & {
@@ -23,3 +26,10 @@ export type ModalState = {
   description: string;
   action: () => void;
 };
+
+export interface StorageStrategy {
+  getTasks: () => Promise<Task[]>;
+  addTask: (task: Task) => Promise<Task>;
+  editTask: (taskId: string, updatedTask: Partial<Task>) => Promise<Task>;
+  deleteTask: (taskId: string) => Promise<void>;
+}

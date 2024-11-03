@@ -1,6 +1,7 @@
+import { useId } from 'react';
+
 import { Label } from '@/components/ui/label';
 import { RadioGroup as RadioGroupUI, RadioGroupItem } from '@/components/ui/radio-group';
-import { useId } from 'react';
 
 interface RadioGroupProps<T extends string> {
   defaultValue?: T;

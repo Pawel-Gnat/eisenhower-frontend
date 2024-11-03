@@ -20,7 +20,7 @@ import { Input } from '@/components/ui/input';
 import { TaskFormSchema } from '@/schemas';
 
 export const TaskForm = () => {
-  const { setTasks } = useContext(AppContext);
+  const { setTasks, storageContext } = useContext(AppContext);
 
   const form = useForm<z.infer<typeof TaskFormSchema>>({
     resolver: zodResolver(TaskFormSchema),
@@ -29,18 +29,22 @@ export const TaskForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof TaskFormSchema>) {
-    setTasks((prev) => [
-      ...prev,
-      {
-        id: self.crypto.randomUUID(),
-        title: values.title,
-        urgency: '',
-        importance: '',
-      },
-    ]);
-    form.reset();
-    toast('Task has been created');
+  async function onSubmit(values: z.infer<typeof TaskFormSchema>) {
+    const newTask = {
+      id: self.crypto.randomUUID(),
+      title: values.title,
+      urgency: undefined,
+      importance: undefined,
+    };
+
+    try {
+      const addedTask = await storageContext.addTask(newTask);
+      setTasks((prev) => [...prev, addedTask]);
+      form.reset();
+      toast('Task has been created');
+    } catch (error) {
+      toast.error('Failed to create task');
+    }
   }
 
   return (

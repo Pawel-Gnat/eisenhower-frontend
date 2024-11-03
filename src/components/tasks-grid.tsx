@@ -9,7 +9,7 @@ import { TaskCard } from './task-card';
 import { Task } from '@/types';
 
 export const TasksGrid = () => {
-  const { tasks, setTasks } = useContext(AppContext);
+  const { tasks, setTasks, storageContext } = useContext(AppContext);
   const { dispatch } = useContext(ModalContext);
 
   const handleDeleteTask = (id: string, title: string) => {
@@ -17,9 +17,14 @@ export const TasksGrid = () => {
       type: 'DELETE_TASK',
       payload: {
         taskName: title,
-        action: () => {
-          setTasks((prev) => prev.filter((task) => task.id !== id));
-          toast('Task has been deleted');
+        action: async () => {
+          try {
+            await storageContext.deleteTask(id);
+            setTasks((prev) => prev.filter((task) => task.id !== id));
+            toast('Task has been deleted');
+          } catch (error) {
+            toast.error('Failed to delete task');
+          }
         },
       },
     });
@@ -32,14 +37,14 @@ export const TasksGrid = () => {
     });
   };
 
-  const handleTaskSelectOption = <K extends keyof Task>(
-    id: string,
-    field: K,
-    value: Task[K],
-  ) => {
-    setTasks((prev) =>
-      prev.map((task) => (task.id === id ? { ...task, [field]: value } : task)),
-    );
+  const handleUpdateTask = async (id: string, updates: Partial<Task>) => {
+    try {
+      const updatedTask = await storageContext.editTask(id, updates);
+      setTasks((prev) => prev.map((task) => (task.id === id ? updatedTask : task)));
+      toast('Task has been updated');
+    } catch (error) {
+      toast.error('Failed to update task');
+    }
   };
 
   return (
@@ -48,10 +53,10 @@ export const TasksGrid = () => {
         tasks.map((task) => (
           <TaskCard
             key={task.id}
+            {...task}
             onDelete={handleDeleteTask}
             onEdit={handleEditTask}
-            onSelectOption={handleTaskSelectOption}
-            {...task}
+            onUpdateTask={handleUpdateTask}
           />
         ))
       ) : (

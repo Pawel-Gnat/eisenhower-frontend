@@ -2,18 +2,15 @@ import { Card, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { RadioGroup } from './radio-group';
 
-import { Task } from '@/types';
+import { ImportanceType, Task, UrgencyType } from '@/types';
 
 import { Edit2, Trash2 } from 'lucide-react';
 
 interface TaskCardProps extends Task {
   onDelete: (id: string, title: string) => void;
   onEdit: (id: string, title: string) => void;
-  onSelectOption: <K extends keyof Task>(id: string, field: K, value: Task[K]) => void;
+  onUpdateTask: (id: string, updates: Partial<Task>) => void;
 }
-
-const urgencyOptions: Task['urgency'][] = ['urgent', 'not urgent'];
-const importanceOptions: Task['importance'][] = ['important', 'not important'];
 
 export const TaskCard = ({
   id,
@@ -22,7 +19,7 @@ export const TaskCard = ({
   importance,
   onDelete,
   onEdit,
-  onSelectOption,
+  onUpdateTask,
 }: TaskCardProps) => {
   return (
     <Card className="mx-auto flex min-h-32 w-full flex-col justify-between gap-2 p-4 transition-shadow hover:shadow-md">
@@ -49,15 +46,15 @@ export const TaskCard = ({
       </div>
 
       <div className="flex flex-wrap justify-between gap-4">
-        <RadioGroup<Task['urgency']>
+        <RadioGroup<UrgencyType>
           defaultValue={urgency}
-          values={urgencyOptions}
-          onChange={(value) => onSelectOption(id, 'urgency', value)}
+          values={['urgent', 'not urgent']}
+          onChange={(value) => onUpdateTask(id, { urgency: value })}
         />
-        <RadioGroup<Task['importance']>
+        <RadioGroup<ImportanceType>
           defaultValue={importance}
-          values={importanceOptions}
-          onChange={(value) => onSelectOption(id, 'importance', value)}
+          values={['important', 'not important']}
+          onChange={(value) => onUpdateTask(id, { importance: value })}
         />
       </div>
     </Card>

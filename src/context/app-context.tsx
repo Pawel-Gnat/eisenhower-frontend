@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 
-import { saveToLocalStorage } from '@/helpers/helpers';
+import { StorageContext } from '@/services/storage-context';
 
 import { PdfData, Task } from '@/types';
 
@@ -22,6 +22,7 @@ interface AppContextProps {
   setView: Dispatch<SetStateAction<VIEW>>;
   pdfData: PdfData;
   setPdfData: Dispatch<SetStateAction<PdfData>>;
+  storageContext: StorageContext;
 }
 
 enum VIEW {
@@ -43,21 +44,29 @@ export const AppContext = createContext<AppContextProps>({
   setView: () => {},
   pdfData: initialPdfState,
   setPdfData: () => {},
+  storageContext: new StorageContext(false),
 });
 
 export const AppContextProvider = ({ children }: AppContextProviderProps) => {
-  const [tasks, setTasks] = useState<Task[]>(() =>
-    JSON.parse(localStorage.getItem('isenhower') || '[]'),
-  );
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [view, setView] = useState<VIEW>(0);
   const [pdfData, setPdfData] = useState<PdfData>(initialPdfState);
 
+  const isAuthenticated = false;
+  const storageContext = new StorageContext(isAuthenticated);
+
   useEffect(() => {
-    saveToLocalStorage(tasks);
-  }, [tasks]);
+    const loadTasks = async () => {
+      const initialTasks = await storageContext.getTasks();
+      setTasks(initialTasks);
+    };
+    loadTasks();
+  }, [isAuthenticated]);
 
   return (
-    <AppContext.Provider value={{ tasks, setTasks, view, setView, pdfData, setPdfData }}>
+    <AppContext.Provider
+      value={{ tasks, setTasks, view, setView, pdfData, setPdfData, storageContext }}
+    >
       {children}
     </AppContext.Provider>
   );

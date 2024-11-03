@@ -28,7 +28,7 @@ export interface EditTaskFormRef {
 
 export const EditTaskForm = forwardRef<EditTaskFormRef, EditTaskFormProps>(
   ({ taskId }, ref) => {
-    const { tasks, setTasks } = useContext(AppContext);
+    const { tasks, setTasks, storageContext } = useContext(AppContext);
     const task = tasks.find((task) => task.id === taskId);
 
     const form = useForm<z.infer<typeof TaskFormSchema>>({
@@ -38,14 +38,19 @@ export const EditTaskForm = forwardRef<EditTaskFormRef, EditTaskFormProps>(
       },
     });
 
-    function onSubmit(values: z.infer<typeof TaskFormSchema>) {
-      setTasks((prev) =>
-        prev.map((task) =>
-          task.id === taskId ? { ...task, title: values.title } : task,
-        ),
-      );
-      form.reset();
-      toast('Task has been edited');
+    async function onSubmit(values: z.infer<typeof TaskFormSchema>) {
+      try {
+        const updatedTask = await storageContext.editTask(taskId, {
+          title: values.title,
+        });
+
+        setTasks((prev) => prev.map((task) => (task.id === taskId ? updatedTask : task)));
+
+        form.reset();
+        toast('Task has been edited');
+      } catch (error) {
+        toast.error('Failed to edit task');
+      }
     }
 
     useImperativeHandle(ref, () => ({
