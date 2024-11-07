@@ -3,6 +3,8 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import { useAuth } from '@/hooks/useAuth';
+
 import { ModalContext } from '@/context/modal-context';
 
 import {
@@ -24,6 +26,7 @@ export interface AuthFormRef {
 
 export const AuthForm = forwardRef<AuthFormRef, {}>((props, ref) => {
   const { modalState, dispatch } = useContext(ModalContext);
+  const { login, register } = useAuth();
 
   const form = useForm<z.infer<typeof AuthFormSchema>>({
     resolver: zodResolver(AuthFormSchema),
@@ -33,12 +36,20 @@ export const AuthForm = forwardRef<AuthFormRef, {}>((props, ref) => {
     },
   });
 
-  const onLoginSubmit = (values: z.infer<typeof AuthFormSchema>) => {
-    form.reset();
+  const onLoginSubmit = async (values: z.infer<typeof AuthFormSchema>) => {
+    const result = await login(values);
+    if (result.success) {
+      dispatch({ type: 'CLOSE_MODAL' });
+      form.reset();
+    }
   };
 
-  const onRegisterSubmit = (values: z.infer<typeof AuthFormSchema>) => {
-    form.reset();
+  const onRegisterSubmit = async (values: z.infer<typeof AuthFormSchema>) => {
+    const result = await register(values);
+    if (result.success) {
+      dispatch({ type: 'CLOSE_MODAL' });
+      form.reset();
+    }
   };
 
   const handleLoginState = () => {

@@ -28,8 +28,6 @@ export const Modal = () => {
     if (modalState === 'login' && authFormRef.current) authFormRef.current.loginForm();
     if (modalState === 'register' && authFormRef.current)
       authFormRef.current.registerForm();
-    // TODO: Fix handling error in edit task form, modal close even if error
-    dispatch({ type: 'CLOSE_MODAL' });
   };
 
   return (
