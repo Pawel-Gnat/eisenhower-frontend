@@ -1,19 +1,57 @@
+import axios from 'axios';
+
+import { api } from '@/api/api';
+
 import { StorageStrategy, Task } from '@/types';
 
 export class ApiStorageStrategy implements StorageStrategy {
+  private handleError(operation: string, err: unknown) {
+    let errorMessage = 'An unexpected error occurred';
+
+    if (axios.isAxiosError(err)) {
+      errorMessage = err.response?.data?.error || `Failed to ${operation}`;
+    }
+
+    console.error(`${operation} error:`, err);
+    throw { message: errorMessage, error: err };
+  }
+
   async getTasks(): Promise<Task[]> {
-    console.log('get tasks');
+    try {
+      const response = await api.get('/tasks');
+      return response.data;
+    } catch (err) {
+      this.handleError('fetch tasks', err);
+      return [];
+    }
   }
 
   async addTask(task: Task): Promise<Task> {
-    console.log('add task');
+    try {
+      const response = await api.post('/tasks', task);
+      return response.data;
+    } catch (err) {
+      this.handleError('add task', err);
+      throw err;
+    }
   }
 
   async editTask(taskId: string, updatedTask: Partial<Task>): Promise<Task> {
-    console.log('edit task');
+    try {
+      const response = await api.patch(`/tasks/${taskId}`, updatedTask);
+      return response.data;
+    } catch (err) {
+      this.handleError('update task', err);
+      throw err;
+    }
   }
 
   async deleteTask(taskId: string): Promise<void> {
-    console.log('delete task');
+    try {
+      await api.delete(`/tasks/${taskId}`);
+    } catch (err) {
+      this.handleError('delete task', err);
+      throw err;
+    }
   }
 }
