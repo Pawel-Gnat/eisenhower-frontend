@@ -7,6 +7,10 @@ import {
   useState,
 } from 'react';
 
+import { api } from '@/api/api';
+
+import { useAuth } from '@/hooks/useAuth';
+
 import { StorageContext } from '@/services/storage-context';
 
 import { PdfData, Task } from '@/types';
@@ -23,10 +27,11 @@ interface AppContextProps {
   pdfData: PdfData;
   setPdfData: Dispatch<SetStateAction<PdfData>>;
   isAuthenticated: boolean;
-  setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   storageContext: StorageContext;
+  handleLogin: (email: string, password: string) => Promise<boolean>;
+  handleLogout: () => void;
 }
 
 enum VIEW {
@@ -49,10 +54,11 @@ export const AppContext = createContext<AppContextProps>({
   pdfData: initialPdfState,
   setPdfData: () => {},
   isAuthenticated: false,
-  setIsAuthenticated: () => {},
   isLoading: true,
   setIsLoading: () => {},
   storageContext: new StorageContext(false),
+  handleLogin: async () => false,
+  handleLogout: async () => {},
 });
 
 export const AppContextProvider = ({ children }: AppContextProviderProps) => {
@@ -60,9 +66,36 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
   const [view, setView] = useState<VIEW>(VIEW.CREATE);
   const [pdfData, setPdfData] = useState<PdfData>(initialPdfState);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const { login } = useAuth();
   const storageContext = new StorageContext(isAuthenticated);
+
+  const handleLogin = async (email: string, password: string): Promise<boolean> => {
+    setIsLoading(true);
+    const result = await login({ email, password });
+
+    if (result.success) {
+      setIsAuthenticated(true);
+      localStorage.setItem('eisenhower-token', result.data.token);
+    }
+
+    setIsLoading(false);
+    return result.success;
+  };
+
+  const handleLogout = async () => {
+    try {
+      setIsLoading(true);
+      await api.post('/auth/logout');
+      setIsAuthenticated(false);
+      localStorage.removeItem('token');
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     const loadTasks = async () => {
@@ -90,9 +123,10 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
         setPdfData,
         storageContext,
         isAuthenticated,
-        setIsAuthenticated,
         isLoading,
         setIsLoading,
+        handleLogin,
+        handleLogout,
       }}
     >
       {children}

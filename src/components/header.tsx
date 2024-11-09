@@ -8,15 +8,13 @@ import { Button } from './ui/button';
 
 export const Header = () => {
   const { dispatch } = useContext(ModalContext);
-  const { isAuthenticated, setIsAuthenticated } = useContext(AppContext);
+  const { isAuthenticated, handleLogout } = useContext(AppContext);
 
   const handleAuth = () => {
-    // if (isAuthenticated) {
-    //   setIsAuthenticated(false);
-    //   return;
-    // }
-
-    // TODO: Implement auth
+    if (isAuthenticated) {
+      handleLogout();
+      return;
+    }
 
     dispatch({
       type: 'LOGIN',

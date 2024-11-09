@@ -43,9 +43,7 @@ export const EditTaskForm = forwardRef<EditTaskFormRef, EditTaskFormProps>(
         const updatedTask = await storageContext.editTask(taskId, {
           title: values.title,
         });
-
         setTasks((prev) => prev.map((task) => (task.id === taskId ? updatedTask : task)));
-
         form.reset();
         toast('Task has been edited');
       } catch (error) {
