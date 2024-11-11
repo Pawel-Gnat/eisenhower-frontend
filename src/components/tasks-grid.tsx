@@ -9,7 +9,7 @@ import { TaskCard } from './task-card';
 import { Task } from '@/types';
 
 export const TasksGrid = () => {
-  const { tasks, setTasks, storageContext } = useContext(AppContext);
+  const { isLoading, tasks, setTasks, storageContext } = useContext(AppContext);
   const { dispatch } = useContext(ModalContext);
 
   const handleDeleteTask = (id: string, title: string) => {
@@ -49,7 +49,11 @@ export const TasksGrid = () => {
 
   return (
     <div className="scrollbar-custom mx-auto my-4 grid w-full max-w-screen-2xl flex-1 grid-cols-auto-fill grid-rows-auto-fill gap-4 overflow-y-auto rounded-xl border-2 border-dashed p-4">
-      {tasks.length > 0 ? (
+      {isLoading ? (
+        <p className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          Loading...
+        </p>
+      ) : tasks.length > 0 ? (
         tasks.map((task) => (
           <TaskCard
             key={task.id}

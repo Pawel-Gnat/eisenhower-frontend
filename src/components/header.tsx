@@ -8,10 +8,10 @@ import { Button } from './ui/button';
 
 export const Header = () => {
   const { dispatch } = useContext(ModalContext);
-  const { isAuthenticated, handleLogout } = useContext(AppContext);
+  const { userToken, handleLogout } = useContext(AppContext);
 
   const handleAuth = () => {
-    if (isAuthenticated) {
+    if (userToken) {
       handleLogout();
       return;
     }
@@ -24,7 +24,7 @@ export const Header = () => {
   return (
     <header className="flex flex-row items-center justify-between gap-4">
       <HeadingH1 text="Eisenhower Matrix" />
-      <Button onClick={handleAuth}>{isAuthenticated ? 'Logout' : 'Login'}</Button>
+      <Button onClick={handleAuth}>{userToken ? 'Logout' : 'Login'}</Button>
     </header>
   );
 };

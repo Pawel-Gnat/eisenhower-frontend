@@ -6,16 +6,12 @@ import { StorageStrategy, Task } from '@/types';
 export class StorageContext {
   private strategy: StorageStrategy;
 
-  constructor(isAuthenticated: boolean) {
-    this.strategy = isAuthenticated
-      ? new ApiStorageStrategy()
-      : new LocalStorageStrategy();
+  constructor(userToken: string | null) {
+    this.strategy = userToken ? new ApiStorageStrategy() : new LocalStorageStrategy();
   }
 
-  setStrategy(isAuthenticated: boolean) {
-    this.strategy = isAuthenticated
-      ? new ApiStorageStrategy()
-      : new LocalStorageStrategy();
+  setStrategy(userToken: string | null) {
+    this.strategy = userToken ? new ApiStorageStrategy() : new LocalStorageStrategy();
   }
 
   async getTasks() {

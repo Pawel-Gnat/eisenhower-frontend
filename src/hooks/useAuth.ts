@@ -4,6 +4,8 @@ import { z } from 'zod';
 
 import { api } from '@/api/api';
 
+import { upperCaseFirstLetter } from '@/helpers/helpers';
+
 import { AuthFormSchema } from '@/schemas';
 
 export const useAuth = () => {
@@ -21,7 +23,7 @@ export const useAuth = () => {
       return { success: true, data: response.data };
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        toast.error(err.response?.data?.error || `${type.toUpperCase()} failed`);
+        toast.error(err.response?.data?.error || `${upperCaseFirstLetter(type)} failed`);
       } else {
         toast.error('An unexpected error occurred');
       }

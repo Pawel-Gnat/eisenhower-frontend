@@ -26,7 +26,7 @@ interface AppContextProps {
   setView: Dispatch<SetStateAction<VIEW>>;
   pdfData: PdfData;
   setPdfData: Dispatch<SetStateAction<PdfData>>;
-  isAuthenticated: boolean;
+  userToken: string | null;
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   storageContext: StorageContext;
@@ -53,10 +53,10 @@ export const AppContext = createContext<AppContextProps>({
   setView: () => {},
   pdfData: initialPdfState,
   setPdfData: () => {},
-  isAuthenticated: false,
+  userToken: null,
   isLoading: true,
   setIsLoading: () => {},
-  storageContext: new StorageContext(false),
+  storageContext: new StorageContext(null),
   handleLogin: async () => false,
   handleLogout: async () => {},
 });
@@ -65,19 +65,24 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [view, setView] = useState<VIEW>(VIEW.CREATE);
   const [pdfData, setPdfData] = useState<PdfData>(initialPdfState);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [userToken, setUserToken] = useState<string | null>(
+    localStorage.getItem('eisenhower-token'),
+  );
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const { login } = useAuth();
-  const storageContext = new StorageContext(isAuthenticated);
+  const storageContext = new StorageContext(userToken);
 
   const handleLogin = async (email: string, password: string): Promise<boolean> => {
     setIsLoading(true);
     const result = await login({ email, password });
 
     if (result.success) {
-      setIsAuthenticated(true);
-      localStorage.setItem('eisenhower-token', result.data.token);
+      const token = result.data.token;
+      setUserToken(token);
+      storageContext.setStrategy(token);
+      setView(VIEW.CREATE);
+      localStorage.setItem('eisenhower-token', token);
     }
 
     setIsLoading(false);
@@ -87,9 +92,11 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
   const handleLogout = async () => {
     try {
       setIsLoading(true);
-      await api.post('/auth/logout');
-      setIsAuthenticated(false);
-      localStorage.removeItem('token');
+      await api.get('/auth/logout');
+      setUserToken('');
+      storageContext.setStrategy('');
+      setView(VIEW.CREATE);
+      localStorage.removeItem('eisenhower-token');
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
@@ -97,20 +104,21 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
     }
   };
 
+  const loadTasks = async () => {
+    try {
+      setIsLoading(true);
+      const initialTasks = await storageContext.getTasks();
+      setTasks(initialTasks);
+    } catch (error) {
+      console.error('Failed to load tasks:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const loadTasks = async () => {
-      try {
-        setIsLoading(true);
-        const initialTasks = await storageContext.getTasks();
-        setTasks(initialTasks);
-      } catch (error) {
-        console.error('Failed to load tasks:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
     loadTasks();
-  }, [isAuthenticated]);
+  }, [userToken]);
 
   return (
     <AppContext.Provider
@@ -122,7 +130,7 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
         pdfData,
         setPdfData,
         storageContext,
-        isAuthenticated,
+        userToken,
         isLoading,
         setIsLoading,
         handleLogin,
