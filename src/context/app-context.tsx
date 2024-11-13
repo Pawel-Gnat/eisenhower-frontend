@@ -107,8 +107,8 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
   const loadTasks = async () => {
     try {
       setIsLoading(true);
-      const initialTasks = await storageContext.getTasks();
-      setTasks(initialTasks);
+      const response = await storageContext.getTasks();
+      setTasks(response.object);
     } catch (error) {
       console.error('Failed to load tasks:', error);
     } finally {

@@ -20,7 +20,7 @@ export const TasksGrid = () => {
         action: async () => {
           try {
             await storageContext.deleteTask(id);
-            setTasks((prev) => prev.filter((task) => task.id !== id));
+            setTasks((prev) => prev.filter((task) => task._id !== id));
             toast('Task has been deleted');
           } catch (error) {
             toast.error('Failed to delete task');
@@ -40,7 +40,7 @@ export const TasksGrid = () => {
   const handleUpdateTask = async (id: string, updates: Partial<Task>) => {
     try {
       const updatedTask = await storageContext.editTask(id, updates);
-      setTasks((prev) => prev.map((task) => (task.id === id ? updatedTask : task)));
+      setTasks((prev) => prev.map((task) => (task._id === id ? updatedTask : task)));
       toast('Task has been updated');
     } catch (error) {
       toast.error('Failed to update task');
@@ -56,7 +56,7 @@ export const TasksGrid = () => {
       ) : tasks.length > 0 ? (
         tasks.map((task) => (
           <TaskCard
-            key={task.id}
+            key={task._id}
             {...task}
             onDelete={handleDeleteTask}
             onEdit={handleEditTask}

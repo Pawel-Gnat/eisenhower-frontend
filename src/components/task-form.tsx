@@ -16,11 +16,12 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { LoadingSpinner } from './ui/loading-spinner';
 
 import { TaskFormSchema } from '@/schemas';
 
 export const TaskForm = () => {
-  const { setTasks, storageContext } = useContext(AppContext);
+  const { setTasks, storageContext, isLoading } = useContext(AppContext);
 
   const form = useForm<z.infer<typeof TaskFormSchema>>({
     resolver: zodResolver(TaskFormSchema),
@@ -31,19 +32,19 @@ export const TaskForm = () => {
 
   async function onSubmit(values: z.infer<typeof TaskFormSchema>) {
     const newTask = {
-      id: self.crypto.randomUUID(),
+      _id: crypto.randomUUID(),
       title: values.title,
-      urgency: undefined,
-      importance: undefined,
+      urgency: null,
+      importance: null,
     };
 
     try {
-      const addedTask = await storageContext.addTask(newTask);
-      setTasks((prev) => [...prev, addedTask]);
+      const response = await storageContext.addTask(newTask);
+      setTasks((prev) => [...prev, response.object]);
       form.reset();
-      toast('Task has been created');
-    } catch (error) {
-      toast.error('Failed to create task');
+      toast(response.message);
+    } catch (error: unknown) {
+      toast.error(error?.message || 'Failed to create task');
     }
   }
 
@@ -66,7 +67,9 @@ export const TaskForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Add</Button>
+        <Button type="submit" className="min-w-[5.5rem]" disabled={isLoading}>
+          {isLoading ? <LoadingSpinner /> : 'Add task'}
+        </Button>
       </form>
     </Form>
   );

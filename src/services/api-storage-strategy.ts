@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { api } from '@/api/api';
 
-import { StorageStrategy, Task } from '@/types';
+import { ResponseFromAPIWithData, StorageStrategy, Task } from '@/types';
 
 export class ApiStorageStrategy implements StorageStrategy {
   private handleError(operation: string, err: unknown) {
@@ -16,17 +16,17 @@ export class ApiStorageStrategy implements StorageStrategy {
     throw { message: errorMessage, error: err };
   }
 
-  async getTasks(): Promise<Task[]> {
+  async getTasks(): Promise<ResponseFromAPIWithData<Task[]>> {
     try {
       const response = await api.get('/tasks');
       return response.data;
     } catch (err) {
       this.handleError('fetch tasks', err);
-      return [];
+      throw err;
     }
   }
 
-  async addTask(task: Task): Promise<Task> {
+  async addTask(task: Task): Promise<ResponseFromAPIWithData<Task>> {
     try {
       const response = await api.post('/tasks', task);
       return response.data;

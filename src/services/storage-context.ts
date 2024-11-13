@@ -1,7 +1,7 @@
 import { LocalStorageStrategy } from './local-storage-strategy';
 import { ApiStorageStrategy } from './api-storage-strategy';
 
-import { StorageStrategy, Task } from '@/types';
+import { ResponseFromAPIWithData, StorageStrategy, Task } from '@/types';
 
 export class StorageContext {
   private strategy: StorageStrategy;
@@ -14,11 +14,11 @@ export class StorageContext {
     this.strategy = userToken ? new ApiStorageStrategy() : new LocalStorageStrategy();
   }
 
-  async getTasks() {
+  async getTasks(): Promise<ResponseFromAPIWithData<Task[]>> {
     return this.strategy.getTasks();
   }
 
-  async addTask(task: Task) {
+  async addTask(task: Task): Promise<ResponseFromAPIWithData<Task>> {
     return this.strategy.addTask(task);
   }
 
