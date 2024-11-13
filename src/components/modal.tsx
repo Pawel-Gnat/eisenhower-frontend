@@ -1,6 +1,7 @@
 import { useContext, useRef } from 'react';
 
 import { ModalContext } from '@/context/modal-context';
+import { AppContext } from '@/context/app-context';
 
 import { EditTaskForm, EditTaskFormRef } from './edit-task-form';
 import { AuthForm, AuthFormRef } from './auth-form';
@@ -15,10 +16,12 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from './ui/alert-dialog';
+import { LoadingSpinner } from './ui/loading-spinner';
 
 export const Modal = () => {
   const { modalState, title, description, taskId, action, dispatch } =
     useContext(ModalContext);
+  const { isLoading } = useContext(AppContext);
   const editTaskFormRef = useRef<EditTaskFormRef>(null);
   const authFormRef = useRef<AuthFormRef>(null);
 
@@ -45,8 +48,12 @@ export const Modal = () => {
           <AlertDialogCancel onClick={() => dispatch({ type: 'CLOSE_MODAL' })}>
             Cancel
           </AlertDialogCancel>
-          <AlertDialogAction onClick={handleAction}>
-            {taskId ? 'Edit' : 'Continue'}
+          <AlertDialogAction
+            className="min-w-28"
+            onClick={handleAction}
+            disabled={isLoading}
+          >
+            {isLoading ? <LoadingSpinner /> : <>{taskId ? 'Edit' : 'Continue'}</>}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
