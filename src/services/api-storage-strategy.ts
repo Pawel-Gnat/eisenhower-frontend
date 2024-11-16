@@ -2,10 +2,16 @@ import axios from 'axios';
 
 import { api } from '@/api/api';
 
-import { ResponseFromAPIWithData, StorageStrategy, Task } from '@/types';
+import {
+  ResponseError,
+  ResponseFromAPI,
+  ResponseFromAPIWithData,
+  StorageStrategy,
+  Task,
+} from '@/types';
 
 export class ApiStorageStrategy implements StorageStrategy {
-  private handleError(operation: string, err: unknown) {
+  private handleError(operation: string, err: unknown): ResponseError {
     let errorMessage = 'An unexpected error occurred';
 
     if (axios.isAxiosError(err)) {
@@ -46,9 +52,10 @@ export class ApiStorageStrategy implements StorageStrategy {
     }
   }
 
-  async deleteTask(taskId: string): Promise<void> {
+  async deleteTask(taskId: string): Promise<ResponseFromAPI> {
     try {
-      await api.delete(`/tasks/${taskId}`);
+      const response = await api.delete(`/tasks/${taskId}`);
+      return response.data;
     } catch (err) {
       this.handleError('delete task', err);
       throw err;

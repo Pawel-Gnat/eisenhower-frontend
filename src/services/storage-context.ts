@@ -1,7 +1,7 @@
 import { LocalStorageStrategy } from './local-storage-strategy';
 import { ApiStorageStrategy } from './api-storage-strategy';
 
-import { ResponseFromAPIWithData, StorageStrategy, Task } from '@/types';
+import { ResponseFromAPI, ResponseFromAPIWithData, StorageStrategy, Task } from '@/types';
 
 export class StorageContext {
   private strategy: StorageStrategy;
@@ -26,7 +26,7 @@ export class StorageContext {
     return this.strategy.editTask(taskId, updatedTask);
   }
 
-  async deleteTask(taskId: string): Promise<void> {
+  async deleteTask(taskId: string): Promise<ResponseFromAPI> {
     return this.strategy.deleteTask(taskId);
   }
 }

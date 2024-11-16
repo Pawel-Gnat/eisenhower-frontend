@@ -13,7 +13,7 @@ interface TaskCardProps extends Task {
 }
 
 export const TaskCard = ({
-  id,
+  _id,
   title,
   urgency,
   importance,
@@ -29,7 +29,7 @@ export const TaskCard = ({
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => onEdit(id, title)}
+            onClick={() => onEdit(_id, title)}
             aria-label="Edit task"
           >
             <Edit2 className="h-4 w-4" />
@@ -37,7 +37,7 @@ export const TaskCard = ({
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => onDelete(id, title)}
+            onClick={() => onDelete(_id, title)}
             aria-label="Delete task"
           >
             <Trash2 className="h-4 w-4" />
@@ -49,12 +49,12 @@ export const TaskCard = ({
         <RadioGroup<UrgencyType>
           defaultValue={urgency}
           values={['urgent', 'not urgent']}
-          onChange={(value) => onUpdateTask(id, { urgency: value })}
+          onChange={(value) => onUpdateTask(_id, { urgency: value })}
         />
         <RadioGroup<ImportanceType>
           defaultValue={importance}
           values={['important', 'not important']}
-          onChange={(value) => onUpdateTask(id, { importance: value })}
+          onChange={(value) => onUpdateTask(_id, { importance: value })}
         />
       </div>
     </Card>

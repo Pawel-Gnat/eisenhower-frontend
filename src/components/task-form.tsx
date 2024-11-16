@@ -20,6 +20,8 @@ import { LoadingSpinner } from './ui/loading-spinner';
 
 import { TaskFormSchema } from '@/schemas';
 
+import { Status } from '@/types';
+
 export const TaskForm = () => {
   const { setTasks, storageContext, isLoading } = useContext(AppContext);
 
@@ -40,11 +42,15 @@ export const TaskForm = () => {
 
     try {
       const response = await storageContext.addTask(newTask);
-      setTasks((prev) => [...prev, response.object]);
-      form.reset();
-      toast(response.message);
+
+      if (response.status === Status.SUCCESS) {
+        setTasks((prev) => [...prev, response.object]);
+        form.reset();
+        toast(response.message);
+      }
     } catch (error: unknown) {
-      toast.error(error?.message || 'Failed to create task');
+      const errorMessage = (error as Error).message || 'Failed to create task';
+      toast.error(errorMessage);
     }
   }
 

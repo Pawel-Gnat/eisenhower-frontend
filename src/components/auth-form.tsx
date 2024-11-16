@@ -39,18 +39,18 @@ export const AuthForm = forwardRef<AuthFormRef, {}>((_, ref) => {
   });
 
   const onLoginSubmit = async (values: z.infer<typeof AuthFormSchema>) => {
-    const result = await handleLogin(values.email, values.password);
+    const response = await handleLogin(values.email, values.password);
 
-    if (result) {
+    if (response) {
       dispatch({ type: 'CLOSE_MODAL' });
       form.reset();
     }
   };
 
   const onRegisterSubmit = async (values: z.infer<typeof AuthFormSchema>) => {
-    const result = await register(values);
+    const response = await register(values);
 
-    if (result.success) {
+    if (response.success) {
       dispatch({ type: 'CLOSE_MODAL' });
       form.reset();
     }

@@ -6,7 +6,7 @@ import { ModalContext } from '@/context/modal-context';
 
 import { TaskCard } from './task-card';
 
-import { Task } from '@/types';
+import { Status, Task } from '@/types';
 
 export const TasksGrid = () => {
   const { isLoading, tasks, setTasks, storageContext } = useContext(AppContext);
@@ -19,11 +19,16 @@ export const TasksGrid = () => {
         taskName: title,
         action: async () => {
           try {
-            await storageContext.deleteTask(id);
-            setTasks((prev) => prev.filter((task) => task._id !== id));
-            toast('Task has been deleted');
-          } catch (error) {
-            toast.error('Failed to delete task');
+            const response = await storageContext.deleteTask(id);
+
+            if (response.status === Status.SUCCESS) {
+              setTasks((prev) => prev.filter((task) => task._id !== id));
+              dispatch({ type: 'CLOSE_MODAL' });
+              toast(response.message);
+            }
+          } catch (error: unknown) {
+            const errorMessage = (error as Error).message || 'Failed to delete task';
+            toast.error(errorMessage);
           }
         },
       },

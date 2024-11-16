@@ -1,11 +1,11 @@
-export type UrgencyType = 'urgent' | 'not urgent';
-export type ImportanceType = 'important' | 'not important';
+export type UrgencyType = 'urgent' | 'not urgent' | null;
+export type ImportanceType = 'important' | 'not important' | null;
 
 export type Task = {
   _id: string;
   title: string;
-  urgency: UrgencyType | null;
-  importance: ImportanceType | null;
+  urgency: UrgencyType;
+  importance: ImportanceType;
 };
 
 export type SortedTask = Task & {
@@ -31,7 +31,7 @@ export interface StorageStrategy {
   getTasks: () => Promise<ResponseFromAPIWithData<Task[]>>;
   addTask: (task: Task) => Promise<ResponseFromAPIWithData<Task>>;
   editTask: (taskId: string, updatedTask: Partial<Task>) => Promise<Task>;
-  deleteTask: (taskId: string) => Promise<void>;
+  deleteTask: (taskId: string) => Promise<ResponseFromAPI>;
 }
 
 export type ResponseFromAPIWithData<T> = {
@@ -39,6 +39,17 @@ export type ResponseFromAPIWithData<T> = {
   httpStatus: number;
   message: string;
   status: Status;
+};
+
+export type ResponseFromAPI = {
+  httpStatus: number;
+  message: string;
+  status: Status;
+};
+
+export type ResponseError = {
+  message: string;
+  error: unknown;
 };
 
 export enum Status {

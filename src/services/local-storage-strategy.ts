@@ -1,10 +1,24 @@
-import { ResponseFromAPIWithData, Status, StorageStrategy, Task } from '@/types';
+import {
+  ResponseError,
+  ResponseFromAPI,
+  ResponseFromAPIWithData,
+  Status,
+  StorageStrategy,
+  Task,
+} from '@/types';
 
 export class LocalStorageStrategy implements StorageStrategy {
   private readonly STORAGE_KEY = 'isenhower';
 
   private saveToLocalStorage(tasks: Task[]) {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(tasks));
+  }
+
+  private handleError(operation: string, err: unknown): ResponseError {
+    let errorMessage = 'Task not found';
+
+    console.error(`${operation} error:`, err);
+    throw { message: errorMessage, error: err };
   }
 
   async getTasks(): Promise<ResponseFromAPIWithData<Task[]>> {
@@ -38,7 +52,7 @@ export class LocalStorageStrategy implements StorageStrategy {
     const taskIndex = tasks.findIndex((task) => task._id === taskId);
 
     if (taskIndex === -1) {
-      throw new Error('Task not found');
+      this.handleError('edit task', new Error('Task not found'));
     }
 
     const updatedTasks = tasks.map((task) =>
@@ -49,10 +63,16 @@ export class LocalStorageStrategy implements StorageStrategy {
     return updatedTasks[taskIndex];
   }
 
-  async deleteTask(taskId: string): Promise<void> {
+  async deleteTask(taskId: string): Promise<ResponseFromAPI> {
     const response = await this.getTasks();
     const tasks = response.object;
     const updatedTasks = tasks.filter((task) => task._id !== taskId);
     this.saveToLocalStorage(updatedTasks);
+
+    return {
+      message: 'Task deleted',
+      httpStatus: 204,
+      status: Status.SUCCESS,
+    };
   }
 }
