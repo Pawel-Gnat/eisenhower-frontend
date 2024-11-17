@@ -42,7 +42,10 @@ export class ApiStorageStrategy implements StorageStrategy {
     }
   }
 
-  async editTask(taskId: string, updatedTask: Partial<Task>): Promise<Task> {
+  async editTask(
+    taskId: string,
+    updatedTask: Partial<Task>,
+  ): Promise<ResponseFromAPIWithData<Task>> {
     try {
       const response = await api.patch(`/tasks/${taskId}`, updatedTask);
       return response.data;

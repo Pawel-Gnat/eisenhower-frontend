@@ -46,7 +46,7 @@ export const TaskForm = () => {
       if (response.status === Status.SUCCESS) {
         setTasks((prev) => [...prev, response.object]);
         form.reset();
-        toast(response.message);
+        toast.success(response.message);
       }
     } catch (error: unknown) {
       const errorMessage = (error as Error).message || 'Failed to create task';

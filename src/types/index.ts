@@ -30,7 +30,10 @@ export type ModalState = {
 export interface StorageStrategy {
   getTasks: () => Promise<ResponseFromAPIWithData<Task[]>>;
   addTask: (task: Task) => Promise<ResponseFromAPIWithData<Task>>;
-  editTask: (taskId: string, updatedTask: Partial<Task>) => Promise<Task>;
+  editTask: (
+    taskId: string,
+    updatedTask: Partial<Task>,
+  ) => Promise<ResponseFromAPIWithData<Task>>;
   deleteTask: (taskId: string) => Promise<ResponseFromAPI>;
 }
 

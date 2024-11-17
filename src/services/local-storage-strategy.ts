@@ -46,7 +46,10 @@ export class LocalStorageStrategy implements StorageStrategy {
     };
   }
 
-  async editTask(taskId: string, updatedTask: Partial<Task>): Promise<Task> {
+  async editTask(
+    taskId: string,
+    updatedTask: Partial<Task>,
+  ): Promise<ResponseFromAPIWithData<Task>> {
     const response = await this.getTasks();
     const tasks = response.object;
     const taskIndex = tasks.findIndex((task) => task._id === taskId);
@@ -60,7 +63,13 @@ export class LocalStorageStrategy implements StorageStrategy {
     );
 
     this.saveToLocalStorage(updatedTasks);
-    return updatedTasks[taskIndex];
+
+    return {
+      message: 'Task updated',
+      object: updatedTasks[taskIndex],
+      httpStatus: 200,
+      status: Status.SUCCESS,
+    };
   }
 
   async deleteTask(taskId: string): Promise<ResponseFromAPI> {

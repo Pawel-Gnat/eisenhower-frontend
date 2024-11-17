@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 
 import { AppContext } from '@/context/app-context';
+import { ModalContext } from '@/context/modal-context';
 
 import {
   Form,
@@ -18,6 +19,8 @@ import { Input } from '@/components/ui/input';
 
 import { TaskFormSchema } from '@/schemas';
 
+import { Status } from '@/types';
+
 interface EditTaskFormProps {
   taskId: string;
 }
@@ -29,7 +32,8 @@ export interface EditTaskFormRef {
 export const EditTaskForm = forwardRef<EditTaskFormRef, EditTaskFormProps>(
   ({ taskId }, ref) => {
     const { tasks, setTasks, storageContext } = useContext(AppContext);
-    const task = tasks.find((task) => task.id === taskId);
+    const { dispatch } = useContext(ModalContext);
+    const task = tasks.find((task) => task._id === taskId);
 
     const form = useForm<z.infer<typeof TaskFormSchema>>({
       resolver: zodResolver(TaskFormSchema),
@@ -40,14 +44,21 @@ export const EditTaskForm = forwardRef<EditTaskFormRef, EditTaskFormProps>(
 
     async function onSubmit(values: z.infer<typeof TaskFormSchema>) {
       try {
-        const updatedTask = await storageContext.editTask(taskId, {
+        const response = await storageContext.editTask(taskId, {
           title: values.title,
         });
-        setTasks((prev) => prev.map((task) => (task.id === taskId ? updatedTask : task)));
-        form.reset();
-        toast('Task has been edited');
-      } catch (error) {
-        toast.error('Failed to edit task');
+
+        if (response.status === Status.SUCCESS) {
+          setTasks((prev) =>
+            prev.map((task) => (task._id === taskId ? response.object : task)),
+          );
+          dispatch({ type: 'CLOSE_MODAL' });
+          toast.success(response.message);
+          form.reset();
+        }
+      } catch (error: unknown) {
+        const errorMessage = (error as Error).message || 'Failed to edit task';
+        toast.error(errorMessage);
       }
     }
 

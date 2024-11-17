@@ -22,7 +22,10 @@ export class StorageContext {
     return this.strategy.addTask(task);
   }
 
-  async editTask(taskId: string, updatedTask: Partial<Task>) {
+  async editTask(
+    taskId: string,
+    updatedTask: Partial<Task>,
+  ): Promise<ResponseFromAPIWithData<Task>> {
     return this.strategy.editTask(taskId, updatedTask);
   }
 

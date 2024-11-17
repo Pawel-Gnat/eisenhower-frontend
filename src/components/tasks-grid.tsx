@@ -24,7 +24,7 @@ export const TasksGrid = () => {
             if (response.status === Status.SUCCESS) {
               setTasks((prev) => prev.filter((task) => task._id !== id));
               dispatch({ type: 'CLOSE_MODAL' });
-              toast(response.message);
+              toast.success(response.message);
             }
           } catch (error: unknown) {
             const errorMessage = (error as Error).message || 'Failed to delete task';
@@ -35,7 +35,7 @@ export const TasksGrid = () => {
     });
   };
 
-  const handleEditTask = (id: string, title: string) => {
+  const handleTaskNameChange = (id: string, title: string) => {
     dispatch({
       type: 'EDIT_TASK',
       payload: { taskName: title, taskId: id },
@@ -43,13 +43,13 @@ export const TasksGrid = () => {
   };
 
   const handleUpdateTask = async (id: string, updates: Partial<Task>) => {
-    try {
-      const updatedTask = await storageContext.editTask(id, updates);
-      setTasks((prev) => prev.map((task) => (task._id === id ? updatedTask : task)));
-      toast('Task has been updated');
-    } catch (error) {
-      toast.error('Failed to update task');
-    }
+    // try {
+    //   const updatedTask = await storageContext.editTask(id, updates);
+    //   setTasks((prev) => prev.map((task) => (task._id === id ? updatedTask : task)));
+    //   toast('Task has been updated');
+    // } catch (error) {
+    //   toast.error('Failed to update task');
+    // }
   };
 
   return (
@@ -64,7 +64,7 @@ export const TasksGrid = () => {
             key={task._id}
             {...task}
             onDelete={handleDeleteTask}
-            onEdit={handleEditTask}
+            onEdit={handleTaskNameChange}
             onUpdateTask={handleUpdateTask}
           />
         ))
