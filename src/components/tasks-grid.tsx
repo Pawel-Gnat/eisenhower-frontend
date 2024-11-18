@@ -43,13 +43,19 @@ export const TasksGrid = () => {
   };
 
   const handleUpdateTask = async (id: string, updates: Partial<Task>) => {
-    // try {
-    //   const updatedTask = await storageContext.editTask(id, updates);
-    //   setTasks((prev) => prev.map((task) => (task._id === id ? updatedTask : task)));
-    //   toast('Task has been updated');
-    // } catch (error) {
-    //   toast.error('Failed to update task');
-    // }
+    try {
+      const response = await storageContext.editTask(id, updates);
+
+      if (response.status === Status.SUCCESS) {
+        setTasks((prev) =>
+          prev.map((task) => (task._id === id ? response.object : task)),
+        );
+        toast.success(response.message);
+      }
+    } catch (error: unknown) {
+      const errorMessage = (error as Error).message || 'Failed to update task';
+      toast.error(errorMessage);
+    }
   };
 
   return (
