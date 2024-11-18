@@ -102,7 +102,7 @@ export const MatrixColumn = ({ title, description, tasks }: MatrixColumnProps) =
             strategy={verticalListSortingStrategy}
           >
             {sortedTasks.map((task) => (
-              <MatrixCard key={task.id} order={task.order} title={task.title} />
+              <MatrixCard key={task._id} order={task.order} title={task.title} />
             ))}
           </SortableContext>
 
