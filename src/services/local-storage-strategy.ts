@@ -14,6 +14,10 @@ export class LocalStorageStrategy implements StorageStrategy {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(tasks));
   }
 
+  private clearLocalStorage() {
+    localStorage.removeItem(this.STORAGE_KEY);
+  }
+
   private handleError(operation: string, err: unknown): ResponseError {
     let errorMessage = 'Task not found';
 
@@ -80,6 +84,16 @@ export class LocalStorageStrategy implements StorageStrategy {
 
     return {
       message: 'Task deleted',
+      httpStatus: 204,
+      status: Status.SUCCESS,
+    };
+  }
+
+  async deleteAllTasks(): Promise<ResponseFromAPI> {
+    this.clearLocalStorage();
+
+    return {
+      message: 'Tasks deleted',
       httpStatus: 204,
       status: Status.SUCCESS,
     };

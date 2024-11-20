@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { useContext, useEffect } from 'react';
 import { usePDF } from '@react-pdf/renderer';
 
@@ -7,8 +8,10 @@ import { ModalContext } from '@/context/modal-context';
 import { Pdf } from './pdf';
 import { Button } from './ui/button';
 
+import { Status } from '@/types';
+
 export const Footer = () => {
-  const { view, setView, setTasks, pdfData } = useContext(AppContext);
+  const { view, setView, setTasks, pdfData, storageContext } = useContext(AppContext);
   const { dispatch } = useContext(ModalContext);
   const [instance, updateInstance] = usePDF({ document: <Pdf pdfData={pdfData} /> });
 
@@ -21,13 +24,24 @@ export const Footer = () => {
   };
 
   const resetAppState = () => {
-    // setView(0);
-    // setTasks([]);
-
     dispatch({
       type: 'RESET_TASKS',
       payload: {
-        action: () => console.log('reset'),
+        action: async () => {
+          try {
+            const response = await storageContext.deleteAllTasks();
+
+            if (response.status === Status.SUCCESS) {
+              setTasks([]);
+              setView(0);
+              dispatch({ type: 'CLOSE_MODAL' });
+              toast.success(response.message);
+            }
+          } catch (error: unknown) {
+            const errorMessage = (error as Error).message || 'Failed to delete all tasks';
+            toast.error(errorMessage);
+          }
+        },
       },
     });
   };

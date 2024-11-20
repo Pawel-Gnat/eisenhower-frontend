@@ -32,4 +32,8 @@ export class StorageContext {
   async deleteTask(taskId: string): Promise<ResponseFromAPI> {
     return this.strategy.deleteTask(taskId);
   }
+
+  async deleteAllTasks(): Promise<ResponseFromAPI> {
+    return this.strategy.deleteAllTasks();
+  }
 }

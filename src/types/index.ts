@@ -35,6 +35,7 @@ export interface StorageStrategy {
     updatedTask: Partial<Task>,
   ) => Promise<ResponseFromAPIWithData<Task>>;
   deleteTask: (taskId: string) => Promise<ResponseFromAPI>;
+  deleteAllTasks: () => Promise<ResponseFromAPI>;
 }
 
 export type ResponseFromAPIWithData<T> = {

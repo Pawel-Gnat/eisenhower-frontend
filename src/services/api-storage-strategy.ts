@@ -64,4 +64,14 @@ export class ApiStorageStrategy implements StorageStrategy {
       throw err;
     }
   }
+
+  async deleteAllTasks(): Promise<ResponseFromAPI> {
+    try {
+      const response = await api.delete(`/tasks`);
+      return response.data;
+    } catch (err) {
+      this.handleError('delete tasks', err);
+      throw err;
+    }
+  }
 }

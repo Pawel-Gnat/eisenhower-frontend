@@ -50,7 +50,7 @@ export const Pdf = ({ pdfData }: PdfProps) => {
             <Text style={styles.subtitle}>{upperCaseFirstLetter(category)}</Text>
 
             {tasks.map((task, index) => (
-              <Text key={task.id} style={styles.text}>
+              <Text key={task._id} style={styles.text}>
                 {index + 1}. {task.title}
               </Text>
             ))}
