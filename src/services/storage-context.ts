@@ -6,12 +6,16 @@ import { ResponseFromAPI, ResponseFromAPIWithData, StorageStrategy, Task } from 
 export class StorageContext {
   private strategy: StorageStrategy;
 
-  constructor(userToken: string | null) {
-    this.strategy = userToken ? new ApiStorageStrategy() : new LocalStorageStrategy();
+  constructor(isUserLoggedIn: boolean) {
+    this.strategy = isUserLoggedIn
+      ? new ApiStorageStrategy()
+      : new LocalStorageStrategy();
   }
 
-  setStrategy(userToken: string | null) {
-    this.strategy = userToken ? new ApiStorageStrategy() : new LocalStorageStrategy();
+  setStrategy(isUserLoggedIn: boolean) {
+    this.strategy = isUserLoggedIn
+      ? new ApiStorageStrategy()
+      : new LocalStorageStrategy();
   }
 
   async getTasks(): Promise<ResponseFromAPIWithData<Task[]>> {
