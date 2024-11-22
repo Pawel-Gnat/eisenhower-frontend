@@ -8,7 +8,7 @@ import {
 } from '@/types';
 
 export class LocalStorageStrategy implements StorageStrategy {
-  private readonly STORAGE_KEY = 'isenhower';
+  private readonly STORAGE_KEY = 'eisenhower';
 
   private saveToLocalStorage(tasks: Task[]) {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(tasks));
