@@ -16,7 +16,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 
-import { AppContext } from '@/context/app-context';
+import { TaskContext } from '@/context/task-context';
 
 import { MatrixCard } from './matrix-card';
 
@@ -36,7 +36,7 @@ export const MatrixColumn = ({ title, description, tasks }: MatrixColumnProps) =
     })),
   );
   const [activeItem, setActiveItem] = useState<SortedTask | undefined>(undefined);
-  const { setPdfData } = useContext(AppContext);
+  const { setPdfData } = useContext(TaskContext);
   const sensors = useSensors(useSensor(TouchSensor), useSensor(PointerSensor));
 
   useEffect(() => {

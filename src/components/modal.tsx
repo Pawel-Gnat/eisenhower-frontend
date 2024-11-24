@@ -1,7 +1,8 @@
 import { useContext, useRef } from 'react';
 
 import { ModalContext } from '@/context/modal-context';
-import { AppContext } from '@/context/app-context';
+import { TaskContext } from '@/context/task-context';
+import { AuthContext } from '@/context/auth-context';
 
 import { EditTaskForm, EditTaskFormRef } from './edit-task-form';
 import { AuthForm, AuthFormRef } from './auth-form';
@@ -21,7 +22,8 @@ import { LoadingSpinner } from './ui/loading-spinner';
 export const Modal = () => {
   const { modalState, title, description, taskId, action, dispatch } =
     useContext(ModalContext);
-  const { isLoading } = useContext(AppContext);
+  const { isLoading: isAuthLoading } = useContext(AuthContext);
+  const { isLoading: isTaskLoading } = useContext(TaskContext);
   const editTaskFormRef = useRef<EditTaskFormRef>(null);
   const authFormRef = useRef<AuthFormRef>(null);
 
@@ -51,9 +53,13 @@ export const Modal = () => {
           <AlertDialogAction
             className="min-w-28"
             onClick={handleAction}
-            disabled={isLoading}
+            disabled={isAuthLoading || isTaskLoading}
           >
-            {isLoading ? <LoadingSpinner /> : <>{taskId ? 'Edit' : 'Continue'}</>}
+            {isAuthLoading || isTaskLoading ? (
+              <LoadingSpinner />
+            ) : (
+              <>{taskId ? 'Edit' : 'Continue'}</>
+            )}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

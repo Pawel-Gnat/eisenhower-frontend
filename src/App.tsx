@@ -1,5 +1,6 @@
-import { AppContextProvider } from './context/app-context';
+import { TaskContextProvider } from './context/task-context';
 import { ModalContextProvider } from './context/modal-context';
+import { AuthContextProvider } from './context/auth-context';
 
 import { Header } from './components/header';
 import { Main } from './components/main';
@@ -9,15 +10,17 @@ import { Toaster } from './components/ui/sonner';
 
 function App() {
   return (
-    <AppContextProvider>
-      <ModalContextProvider>
-        <Header />
-        <Main />
-        <Footer />
-        <Modal />
-        <Toaster position="bottom-center" />
-      </ModalContextProvider>
-    </AppContextProvider>
+    <AuthContextProvider>
+      <TaskContextProvider>
+        <ModalContextProvider>
+          <Header />
+          <Main />
+          <Footer />
+          <Modal />
+          <Toaster position="bottom-center" />
+        </ModalContextProvider>
+      </TaskContextProvider>
+    </AuthContextProvider>
   );
 }
 

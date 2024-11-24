@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 
-import { AppContext } from '@/context/app-context';
+import { TaskContext } from '@/context/task-context';
 import { ModalContext } from '@/context/modal-context';
 
 import {
@@ -31,7 +31,7 @@ export interface EditTaskFormRef {
 
 export const EditTaskForm = forwardRef<EditTaskFormRef, EditTaskFormProps>(
   ({ taskId }, ref) => {
-    const { tasks, setTasks, storageContext } = useContext(AppContext);
+    const { tasks, setTasks, storageContext } = useContext(TaskContext);
     const { dispatch } = useContext(ModalContext);
     const task = tasks.find((task) => task._id === taskId);
 

@@ -1,11 +1,11 @@
 import { useContext } from 'react';
 
-import { AppContext } from '@/context/app-context';
+import { TaskContext } from '@/context/task-context';
 
 import { MatrixColumn } from './matrix-column';
 
 export const MatrixContainer = () => {
-  const { tasks } = useContext(AppContext);
+  const { tasks } = useContext(TaskContext);
 
   const filteredDoTasks = tasks.filter(
     (task) => task.urgency === 'urgent' && task.importance === 'important',

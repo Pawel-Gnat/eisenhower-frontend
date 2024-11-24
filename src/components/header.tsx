@@ -1,14 +1,14 @@
 import { useContext } from 'react';
 
 import { ModalContext } from '@/context/modal-context';
-import { AppContext } from '@/context/app-context';
+import { AuthContext } from '@/context/auth-context';
 
 import { HeadingH1 } from './typography';
 import { Button } from './ui/button';
 
 export const Header = () => {
   const { dispatch } = useContext(ModalContext);
-  const { isUserLoggedIn, handleLogout } = useContext(AppContext);
+  const { isUserLoggedIn, handleLogout } = useContext(AuthContext);
 
   const handleAuth = () => {
     if (isUserLoggedIn) {

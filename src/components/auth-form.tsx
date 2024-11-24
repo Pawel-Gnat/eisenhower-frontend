@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuth } from '@/hooks/useAuth';
 
 import { ModalContext } from '@/context/modal-context';
-import { AppContext } from '@/context/app-context';
+import { AuthContext } from '@/context/auth-context';
 
 import {
   Form,
@@ -27,7 +27,7 @@ export interface AuthFormRef {
 
 export const AuthForm = forwardRef<AuthFormRef, {}>((_, ref) => {
   const { modalState, dispatch } = useContext(ModalContext);
-  const { handleLogin } = useContext(AppContext);
+  const { handleLogin } = useContext(AuthContext);
   const { register } = useAuth();
 
   const form = useForm<z.infer<typeof AuthFormSchema>>({

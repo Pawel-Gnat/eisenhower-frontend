@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 
-import { AppContext } from '@/context/app-context';
+import { TaskContext } from '@/context/task-context';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -23,7 +23,7 @@ import { TaskFormSchema } from '@/schemas';
 import { Status } from '@/types';
 
 export const TaskForm = () => {
-  const { setTasks, storageContext, isLoading } = useContext(AppContext);
+  const { setTasks, storageContext, isLoading } = useContext(TaskContext);
 
   const form = useForm<z.infer<typeof TaskFormSchema>>({
     resolver: zodResolver(TaskFormSchema),

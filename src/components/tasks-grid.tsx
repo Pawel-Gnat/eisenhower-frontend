@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { toast } from 'sonner';
 
-import { AppContext } from '@/context/app-context';
+import { TaskContext } from '@/context/task-context';
 import { ModalContext } from '@/context/modal-context';
 
 import { TaskCard } from './task-card';
@@ -9,7 +9,7 @@ import { TaskCard } from './task-card';
 import { Status, Task } from '@/types';
 
 export const TasksGrid = () => {
-  const { isLoading, tasks, setTasks, storageContext } = useContext(AppContext);
+  const { isLoading, tasks, setTasks, storageContext } = useContext(TaskContext);
   const { dispatch } = useContext(ModalContext);
 
   const handleDeleteTask = (id: string, title: string) => {

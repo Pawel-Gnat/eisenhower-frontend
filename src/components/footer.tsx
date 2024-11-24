@@ -2,7 +2,7 @@ import { toast } from 'sonner';
 import { useContext, useEffect } from 'react';
 import { usePDF } from '@react-pdf/renderer';
 
-import { AppContext } from '@/context/app-context';
+import { TaskContext } from '@/context/task-context';
 import { ModalContext } from '@/context/modal-context';
 
 import { Pdf } from './pdf';
@@ -11,7 +11,7 @@ import { Button } from './ui/button';
 import { Status } from '@/types';
 
 export const Footer = () => {
-  const { view, setView, setTasks, pdfData, storageContext } = useContext(AppContext);
+  const { view, setView, setTasks, pdfData, storageContext } = useContext(TaskContext);
   const { dispatch } = useContext(ModalContext);
   const [instance, updateInstance] = usePDF({ document: <Pdf pdfData={pdfData} /> });
 
