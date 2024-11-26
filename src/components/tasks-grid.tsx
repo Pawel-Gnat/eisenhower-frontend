@@ -9,11 +9,16 @@ import { TaskCard } from './task-card';
 import { Status, Task } from '@/types';
 
 export const TasksGrid = () => {
-  const { isLoading, tasks, setTasks, storageContext } = useContext(TaskContext);
-  const { dispatch } = useContext(ModalContext);
+  const {
+    isLoading,
+    tasks,
+    storageContext,
+    dispatch: taskDispatch,
+  } = useContext(TaskContext);
+  const { dispatch: modalDispatch } = useContext(ModalContext);
 
   const handleDeleteTask = (id: string, title: string) => {
-    dispatch({
+    modalDispatch({
       type: 'DELETE_TASK',
       payload: {
         taskName: title,
@@ -22,8 +27,11 @@ export const TasksGrid = () => {
             const response = await storageContext.deleteTask(id);
 
             if (response.status === Status.SUCCESS) {
-              setTasks((prev) => prev.filter((task) => task._id !== id));
-              dispatch({ type: 'CLOSE_MODAL' });
+              taskDispatch({
+                type: 'TASKS',
+                payload: { tasks: tasks.filter((task) => task._id !== id) },
+              });
+              modalDispatch({ type: 'CLOSE_MODAL' });
               toast.success(response.message);
             }
           } catch (error: unknown) {
@@ -36,7 +44,7 @@ export const TasksGrid = () => {
   };
 
   const handleTaskNameChange = (id: string, title: string) => {
-    dispatch({
+    modalDispatch({
       type: 'EDIT_TASK',
       payload: { taskName: title, taskId: id },
     });
@@ -47,9 +55,12 @@ export const TasksGrid = () => {
       const response = await storageContext.editTask(id, updates);
 
       if (response.status === Status.SUCCESS) {
-        setTasks((prev) =>
-          prev.map((task) => (task._id === id ? response.object : task)),
-        );
+        taskDispatch({
+          type: 'TASKS',
+          payload: {
+            tasks: tasks.map((task) => (task._id === id ? response.object : task)),
+          },
+        });
         toast.success(response.message);
       }
     } catch (error: unknown) {

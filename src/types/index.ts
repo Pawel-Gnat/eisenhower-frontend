@@ -1,5 +1,6 @@
 export type UrgencyType = 'urgent' | 'not urgent' | null;
 export type ImportanceType = 'important' | 'not important' | null;
+export type VIEW = 'create' | 'render';
 
 export type Task = {
   _id: string;
@@ -25,6 +26,13 @@ export type ModalState = {
   title: string;
   description: string;
   action: () => void;
+};
+
+export type TaskState = {
+  tasks: Task[];
+  view: VIEW;
+  pdfData: PdfData;
+  isLoading: boolean;
 };
 
 export interface StorageStrategy {

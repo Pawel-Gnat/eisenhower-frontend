@@ -11,20 +11,28 @@ import { Button } from './ui/button';
 import { Status } from '@/types';
 
 export const Footer = () => {
-  const { view, setView, setTasks, pdfData, storageContext } = useContext(TaskContext);
-  const { dispatch } = useContext(ModalContext);
-  const [instance, updateInstance] = usePDF({ document: <Pdf pdfData={pdfData} /> });
+  const {
+    view,
+    pdfData,
+    storageContext,
+    dispatch: taskDispatch,
+  } = useContext(TaskContext);
+  const { dispatch: modalDispatch } = useContext(ModalContext);
+  const [instance, update] = usePDF({ document: <Pdf pdfData={pdfData} /> });
 
   useEffect(() => {
-    updateInstance(<Pdf pdfData={pdfData} />);
+    update(<Pdf pdfData={pdfData} />);
   }, [pdfData]);
 
   const toggleView = () => {
-    setView((prev) => (prev === 1 ? 0 : 1));
+    taskDispatch({
+      type: 'VIEW',
+      payload: { view: view === 'create' ? 'render' : 'create' },
+    });
   };
 
   const resetAppState = () => {
-    dispatch({
+    modalDispatch({
       type: 'RESET_TASKS',
       payload: {
         action: async () => {
@@ -32,9 +40,10 @@ export const Footer = () => {
             const response = await storageContext.deleteAllTasks();
 
             if (response.status === Status.SUCCESS) {
-              setTasks([]);
-              setView(0);
-              dispatch({ type: 'CLOSE_MODAL' });
+              taskDispatch({
+                type: 'RESET_TASKS',
+              });
+              modalDispatch({ type: 'CLOSE_MODAL' });
               toast.success(response.message);
             }
           } catch (error: unknown) {
@@ -53,8 +62,8 @@ export const Footer = () => {
       </Button>
 
       <div className="space-x-2">
-        <Button onClick={toggleView}>{!view ? 'Next' : 'Back'}</Button>
-        {view && instance.url ? (
+        <Button onClick={toggleView}>{view === 'create' ? 'Next' : 'Back'}</Button>
+        {view === 'render' && instance.url ? (
           <Button asChild disabled={!!(instance.loading || instance.error)}>
             <a href={instance.url} download="eisenhower.pdf">
               Export to PDF

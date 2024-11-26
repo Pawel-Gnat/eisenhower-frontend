@@ -49,9 +49,9 @@ export const Pdf = ({ pdfData }: PdfProps) => {
           <View key={category}>
             <Text style={styles.subtitle}>{upperCaseFirstLetter(category)}</Text>
 
-            {tasks.map((task, index) => (
-              <Text key={task._id} style={styles.text}>
-                {index + 1}. {task.title}
+            {tasks.map((task) => (
+              <Text key={task.order} style={styles.text}>
+                {task.order}. {task.title}
               </Text>
             ))}
           </View>

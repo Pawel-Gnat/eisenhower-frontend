@@ -31,8 +31,8 @@ export interface EditTaskFormRef {
 
 export const EditTaskForm = forwardRef<EditTaskFormRef, EditTaskFormProps>(
   ({ taskId }, ref) => {
-    const { tasks, setTasks, storageContext } = useContext(TaskContext);
-    const { dispatch } = useContext(ModalContext);
+    const { tasks, storageContext, dispatch: taskDispatch } = useContext(TaskContext);
+    const { dispatch: modalDispatch } = useContext(ModalContext);
     const task = tasks.find((task) => task._id === taskId);
 
     const form = useForm<z.infer<typeof TaskFormSchema>>({
@@ -49,10 +49,13 @@ export const EditTaskForm = forwardRef<EditTaskFormRef, EditTaskFormProps>(
         });
 
         if (response.status === Status.SUCCESS) {
-          setTasks((prev) =>
-            prev.map((task) => (task._id === taskId ? response.object : task)),
-          );
-          dispatch({ type: 'CLOSE_MODAL' });
+          taskDispatch({
+            type: 'TASKS',
+            payload: {
+              tasks: tasks.map((task) => (task._id === taskId ? response.object : task)),
+            },
+          });
+          modalDispatch({ type: 'CLOSE_MODAL' });
           toast.success(response.message);
           form.reset();
         }

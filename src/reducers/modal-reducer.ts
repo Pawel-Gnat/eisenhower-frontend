@@ -81,6 +81,6 @@ export const modalReducer = (state: ModalState, action: Action): ModalState => {
         action: () => {},
       };
     default:
-      throw new Error('Unhandled action type in DialogReducer');
+      throw new Error('Unhandled action type in modalReducer');
   }
 };

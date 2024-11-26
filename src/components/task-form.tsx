@@ -23,7 +23,7 @@ import { TaskFormSchema } from '@/schemas';
 import { Status } from '@/types';
 
 export const TaskForm = () => {
-  const { setTasks, storageContext, isLoading } = useContext(TaskContext);
+  const { tasks, storageContext, isLoading, dispatch } = useContext(TaskContext);
 
   const form = useForm<z.infer<typeof TaskFormSchema>>({
     resolver: zodResolver(TaskFormSchema),
@@ -44,7 +44,10 @@ export const TaskForm = () => {
       const response = await storageContext.addTask(newTask);
 
       if (response.status === Status.SUCCESS) {
-        setTasks((prev) => [...prev, response.object]);
+        dispatch({
+          type: 'TASKS',
+          payload: { tasks: [...tasks, response.object] },
+        });
         form.reset();
         toast.success(response.message);
       }
