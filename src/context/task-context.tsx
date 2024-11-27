@@ -63,10 +63,9 @@ export const TaskContextProvider = ({ children }: TaskContextProviderProps) => {
 
   useEffect(() => {
     if (isAuthLoading) return;
-    storageContext.setStrategy(isUserLoggedIn);
     loadTasks();
     dispatch({ type: 'VIEW', payload: { view: 'create' } });
-  }, [isUserLoggedIn, isAuthLoading]);
+  }, [isAuthLoading]);
 
   return (
     <TaskContext.Provider
