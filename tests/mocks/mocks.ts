@@ -1,4 +1,6 @@
-export const mockedTasks = [
+import { Task } from '@/types';
+
+export const mockedTasks: Task[] = [
   {
     _id: '1',
     title: 'Test Task 1',
@@ -18,3 +20,10 @@ export const mockedTasks = [
     importance: 'important',
   },
 ];
+
+export const newTask: Task = {
+  _id: '4',
+  title: 'Test Task 4',
+  urgency: null,
+  importance: null,
+};
