@@ -1,21 +1,14 @@
-import { LocalStorageStrategy } from './local-storage-strategy';
-import { ApiStorageStrategy } from './api-storage-strategy';
-
 import { ResponseFromAPI, ResponseFromAPIWithData, StorageStrategy, Task } from '@/types';
 
-export class StorageContext {
+export class StorageStrategyContext {
   private strategy: StorageStrategy;
 
-  constructor(isUserLoggedIn: boolean) {
-    this.strategy = isUserLoggedIn
-      ? new ApiStorageStrategy()
-      : new LocalStorageStrategy();
+  constructor(strategy: StorageStrategy) {
+    this.strategy = strategy;
   }
 
-  setStrategy(isUserLoggedIn: boolean) {
-    this.strategy = isUserLoggedIn
-      ? new ApiStorageStrategy()
-      : new LocalStorageStrategy();
+  setStrategy(strategy: StorageStrategy) {
+    this.strategy = strategy;
   }
 
   async getTasks(): Promise<ResponseFromAPIWithData<Task[]>> {

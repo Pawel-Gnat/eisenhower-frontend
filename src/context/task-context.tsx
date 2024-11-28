@@ -4,10 +4,12 @@ import {
   ReactNode,
   useContext,
   useEffect,
+  useMemo,
   useReducer,
 } from 'react';
 
-import { StorageContext } from '@/services/storage-context';
+import { StorageStrategyContext } from '@/services/storage-strategy-context';
+import { StorageFactory } from '@/services/storage-factory';
 
 import { AuthContext } from './auth-context';
 
@@ -20,7 +22,7 @@ interface TaskContextProviderProps {
 }
 
 interface TaskContextProps extends TaskState {
-  storageContext: StorageContext;
+  storageContext: StorageStrategyContext;
   dispatch: Dispatch<Action>;
 }
 
@@ -39,7 +41,7 @@ const initialState: TaskState = {
 };
 
 export const TaskContext = createContext<TaskContextProps>({
-  storageContext: new StorageContext(false),
+  storageContext: new StorageStrategyContext(StorageFactory.createLocalStrategy()),
   ...initialState,
   dispatch: () => {},
 });
@@ -47,7 +49,12 @@ export const TaskContext = createContext<TaskContextProps>({
 export const TaskContextProvider = ({ children }: TaskContextProviderProps) => {
   const { isUserLoggedIn, isLoading: isAuthLoading } = useContext(AuthContext);
   const [state, dispatch] = useReducer(taskReducer, initialState);
-  const storageContext = new StorageContext(isUserLoggedIn);
+
+  const strategy = isUserLoggedIn
+    ? StorageFactory.createApiStrategy()
+    : StorageFactory.createLocalStrategy();
+
+  const storageContext = useMemo(() => new StorageStrategyContext(strategy), [strategy]);
 
   const loadTasks = async () => {
     try {
