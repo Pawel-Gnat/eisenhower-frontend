@@ -1,3 +1,5 @@
+import { LOCAL_STORAGE_KEY } from '@/api/api';
+
 import {
   ResponseError,
   ResponseFromAPI,
@@ -8,13 +10,14 @@ import {
 } from '@/types';
 
 export class LocalStorageStrategy implements StorageStrategy {
-  private readonly STORAGE_KEY = 'eisenhower';
+  private readonly STORAGE_KEY = LOCAL_STORAGE_KEY;
 
   private saveToLocalStorage(tasks: Task[]) {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(tasks));
   }
 
   private clearLocalStorage() {
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify([]));
     localStorage.removeItem(this.STORAGE_KEY);
   }
 
