@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { mockedTasks } from '../mocks/mocks';
 
@@ -6,19 +6,14 @@ import { LOCAL_STORAGE_KEY } from '@/api/api';
 
 import { LocalStorageStrategy } from '@/services/local-storage-strategy';
 
-import { Task } from '@/types';
-
 const getStorageSpy = vi.spyOn(Storage.prototype, 'getItem');
 const setStorageSpy = vi.spyOn(Storage.prototype, 'setItem');
 
 describe('LocalStorageStrategy', () => {
-  let strategy: LocalStorageStrategy;
-
-  beforeEach(() => {
-    strategy = new LocalStorageStrategy();
-  });
+  let strategy = new LocalStorageStrategy();
 
   afterEach(() => {
+    localStorage.clear();
     getStorageSpy.mockClear();
     setStorageSpy.mockClear();
   });
@@ -37,17 +32,17 @@ describe('LocalStorageStrategy', () => {
     );
   });
 
-  // it('should edit a task in localStorage', async () => {
-  //   await strategy.addTask(mockedTasks[0]);
-  //   const updatedTask = { title: 'Updated Task' };
+  it('should edit a task in localStorage', async () => {
+    await strategy.addTask(mockedTasks[0]);
+    const updatedTask = { title: 'Updated Task' };
 
-  //   await strategy.editTask(mockedTasks[0]._id, updatedTask);
+    await strategy.editTask(mockedTasks[0]._id, updatedTask);
 
-  //   expect(setStorageSpy).toHaveBeenCalledWith(
-  //     LOCAL_STORAGE_KEY,
-  //     JSON.stringify([{ ...mockedTasks[0], title: 'Updated Task' }]),
-  //   );
-  // });
+    expect(setStorageSpy).toHaveBeenCalledWith(
+      LOCAL_STORAGE_KEY,
+      JSON.stringify([{ ...mockedTasks[0], title: 'Updated Task' }]),
+    );
+  });
 
   it('should delete a task from localStorage', async () => {
     await strategy.addTask(mockedTasks[0]);
